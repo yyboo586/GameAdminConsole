@@ -102,7 +102,6 @@ import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
 import {captcha, login} from "/@/api/login";
-import GoCaptchaBtn from "/@/components/goCaptcha/GoCaptchaBtn.vue";
 defineOptions({ name: "loginAccount"})
 const { t } = useI18n();
 const {proxy} = <any>getCurrentInstance();
@@ -168,6 +167,7 @@ const onSignIn = async () => {
         // 存储用户信息到浏览器缓存
         Session.set('userInfo', userInfo);
         // 设置用户菜单
+        console.log(res.data.menuList)
         Session.set('userMenu',res.data.menuList)
         // 设置按钮权限
         Session.set('permissions',res.data.permissions)

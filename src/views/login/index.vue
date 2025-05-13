@@ -14,24 +14,24 @@
               <el-tab-pane :label="$t('message.label.one1')" name="account">
                 <Account />
               </el-tab-pane>
-              <el-tab-pane :label="$t('message.label.two2')" name="mobile">
+              <!-- <el-tab-pane :label="$t('message.label.two2')" name="mobile">
                 <Mobile />
-              </el-tab-pane>
+              </el-tab-pane> -->
             </el-tabs>
           </div>
-          <Scan v-if="isScan" />
+          <!-- <Scan v-if="isScan" />
           <div class="login-content-main-sacn" @click="isScan = !isScan">
             <i class="iconfont" :class="isScan ? 'icon-diannao1' : 'icon-barcode-qr'"></i>
             <div class="login-content-main-sacn-delta"></div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
     <div class="login-footer">
       <div class="login-footer-content mt15">
         <div class="login-footer-content-warp">
-          <div>Copyright © 2021-2023 g-fast.cn All Rights Reserved.</div>
-          <div class="mt5">云南奇讯科技有限公司版权所有</div>
+          <div>Copyright © 2023-2025 All Rights Reserved.</div>
+          <div class="mt5">上海商飞智能有限公司版权所有</div>
         </div>
       </div>
     </div>
@@ -43,11 +43,8 @@ import { toRefs, reactive, computed, defineComponent, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import logoMini from '/@/assets/logo-mini.svg';
-import loginIconTwo from '/@/assets/login-icon-two.svg';
 import { NextLoading } from '/@/utils/loading';
 import Account from '/@/views/login/component/account.vue';
-import Mobile from '/@/views/login/component/mobile.vue';
-import Scan from '/@/views/login/component/scan.vue';
 
 // 定义接口来定义对象的类型
 interface LoginState {
