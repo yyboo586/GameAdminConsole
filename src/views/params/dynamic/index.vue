@@ -72,7 +72,7 @@ export default defineComponent({
 			router.push({
 				name: 'paramsDynamicDetails',
 				params: {
-					t: '会议系统管理控制台',
+					t: '管理控制台',
 					id: state.value,
 					tagsViewName: state.tagsViewName,
 				},

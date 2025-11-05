@@ -1,10 +1,10 @@
 <template>
   <el-form ref="loginForm" size="large" class="login-content-form" :model="ruleForm"  :rules="formRules">
-    <el-form-item class="login-animation1" prop="username">
+    <el-form-item class="login-animation1" prop="user_name">
       <el-input
           type="text"
           :placeholder="$t('message.account.accountPlaceholder1')"
-          v-model="ruleForm.username"
+          v-model="ruleForm.user_name"
           clearable autocomplete="off">
         <template #prefix>
           <el-icon class="el-input__icon"><ele-User /></el-icon>
@@ -115,13 +115,13 @@ const verifyStatus = ref(0)
 const state = reactive({
   isShowPassword: false,
   ruleForm: {
-    username: 'demo',
-    password: '123456',
+    user_name: '',
+    password: '',
     verifyCode: '',
     verifyKey:''
   },
   formRules:{
-    username: [
+    user_name: [
       { required: true, trigger: "blur", message: "用户名不能为空" }
     ],
     password: [
@@ -172,7 +172,7 @@ const onSignIn = async () => {
         // 设置按钮权限
         Session.set('permissions',res.data.permissions)
         // 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
-        Cookies.set('username', state.ruleForm.username);
+        Cookies.set('user_name', state.ruleForm.user_name);
         if (!themeConfig.value.isRequestRoutes) {
           // 前端控制路由，2、请注意执行顺序
           await initFrontEndControlRoutes();

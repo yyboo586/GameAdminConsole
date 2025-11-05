@@ -5,7 +5,7 @@ const GameEngine = "http://127.0.0.1:9800"
 // 新增标签表
 export function addTTag(data:object) {
   return request({
-    url: GameEngine+'/api/v1/game-engine/tags',
+    url: GameEngine+'/api/v1/tags',
     method: 'post',
     data: data
   })
@@ -14,7 +14,7 @@ export function addTTag(data:object) {
 // 删除标签表
 export function delTTag(id:number) {
   return request({
-    url: GameEngine+'/api/v1/game-engine/tags/'+id,
+    url: GameEngine+'/api/v1/tags/'+id,
     method: 'delete',
   })
 }
@@ -22,7 +22,7 @@ export function delTTag(id:number) {
 // 修改标签表
 export function updateTTag(id:number,data:object) {
   return request({
-    url: GameEngine+'/api/v1/game-engine/tags/'+id,
+    url: GameEngine+'/api/v1/tags/'+id,
     method: 'put',
     data: data
   })
@@ -31,7 +31,7 @@ export function updateTTag(id:number,data:object) {
 // 查询标签表详细
 export function getTTag(id:number) {
   return request({
-    url: GameEngine+'/api/v1/game-engine/tags/'+id,
+    url: GameEngine+'/api/v1/tags/'+id,
     method: 'get',
     params: {
       id: id.toString()
@@ -71,7 +71,7 @@ res body:
 */
 export function listTTag(query:object) {
   return request({
-    url: GameEngine+'/api/v1/game-engine/tags',
+    url: GameEngine+'/api/v1/tags',
     method: 'get',
     params: query
   })

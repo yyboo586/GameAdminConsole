@@ -82,7 +82,7 @@ export default defineComponent({
 		// https://www.wangeditor.com/
 		const initWangeditor = () => {
 			state.editor = createEditor({
-				html: props.modelValue,
+				html: props.modelValue || '<p><br /></p>',
 				selector: state.editorContent!,
 				config: wangeditorConfig(),
 				mode: props.mode,
@@ -103,8 +103,11 @@ export default defineComponent({
 		watch(
 			() => props.modelValue,
 			(value) => {
+				if (!state.editor) return;
+				const html = value || '<p><br /></p>';
+				if (state.editor.getHtml() === html) return;
 				state.editor.clear();
-				state.editor.dangerouslyInsertHtml(value);
+				state.editor.dangerouslyInsertHtml(html);
 			}
 		);
 		return {

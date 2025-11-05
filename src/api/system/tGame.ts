@@ -5,194 +5,257 @@ const GameEngine = "http://127.0.0.1:9800"
 // 新增游戏
 export function addTGame(data:object) {
   return request({
-    url: GameEngine+'/api/v1/game-engine/games',
+    url: GameEngine+'/api/v1/games',
     method: 'post',
     data: data
   })
 }
 
 // 删除游戏
-export function delTGame(ids:number[]) {
+export function delTGame(id:string) {
   return request({
-    url: GameEngine+'/api/v1/game-engine/games',
+    url: GameEngine+'/api/v1/games/'+id,
     method: 'delete',
-    data:{
-      ids:ids
-    }
   })
 }
 
 // 修改游戏
-export function updateTGame(id:number,data:object) {
+/*
+{
+  "id": "a73d7564-97e0-45d1-b4e6-81b3dbf84e04",
+  "name": "1",
+  "distribute_type": "APK",
+  "developer": "1",
+  "publisher": "1",
+  "description": "1",
+  "details": "1",
+  "category": "动作枪战c",
+  "tags": [
+      "单机"
+  ],
+  "status": "初始状态",
+  "create_time": "2006-01-02 15:04:05",
+  "update_time": "2006-01-02 15:04:05",
+  "icon_file": {
+      "file_id": "b621996a-1def-4b05-bd05-0fc3b7d5ff0c",
+  },
+  "feature_images": [
+      {
+          "file_id": "82fa5d51-9ff2-4c74-a2c1-e32bfddf6bce",
+      },
+      {
+          "file_id": "a1e29179-dec9-48b8-aacd-6dfa8cec183b",
+      }
+  ],
+  "video_file": {
+      "file_id": "231d3789-aaf9-49dc-b5f7-c434c58475ba",
+  },
+  "apk_file": {
+      "file_id": "d26cb9d6-fc3f-4e35-a10d-1b57c949f423",
+  },
+  "h5_link": ""
+}
+}
+*/
+export function updateTGame(id:string,data:object) {
   return request({
-    url: GameEngine+'/api/v1/game-engine/games/'+id,
+    url: GameEngine+'/api/v1/games/'+id,
     method: 'put',
     data: data
   })
 }
 
 // 查询游戏详细
-export function getTGame(id:number) {
+export function getTGame(id:string) {
   return request({
-    url: GameEngine + '/api/v1/game-engine/games/' + id,
+    url: GameEngine + '/api/v1/games/' + id,
     method: 'get',
-    params: {
-      id: id.toString()
-    }
   })
 }
 
 // 查询游戏列表
 /*
-res body:
 {
     "code": 0,
     "message": "OK",
     "data": {
         "list": [
             {
-                "id": 8,
-                "name": "测试游戏2",
-                "distribute_type": 1,
-                "category": {
-                    "id": 3,
-                    "name": "休闲益智",
-                    "create_time": "2025-08-15 18:04:05",
-                    "update_time": "2025-08-15 18:04:05"
-                },
+                "id": "a73d7564-97e0-45d1-b4e6-81b3dbf84e04",
+                "name": "1",
+                "distribute_type": "APK",
+                "developer": "1",
+                "publisher": "1",
+                "description": "1",
+                "details": "1",
+                "category": "动作枪战c",
                 "tags": [
-                    {
-                        "id": 5,
-                        "name": "免费",
-                        "create_time": "2025-08-19 11:54:39",
-                        "update_time": "2025-08-19 11:54:39"
-                    }
+                    "单机"
                 ],
-                "developer": "测试开发商2",
-                "publisher": "测试发行商2",
-                "description": "测试描述",
-                "details": "测试详情",
-                "media_infos": null,
-                "average_rating": 0,
-                "create_time": "2025-08-20 13:39:52",
-                "update_time": "2025-08-20 13:39:52"
-            },
-            {
-                "id": 7,
-                "name": "测试游戏1",
-                "distribute_type": 1,
-                "category": {
-                    "id": 3,
-                    "name": "休闲益智",
-                    "create_time": "2025-08-15 18:04:05",
-                    "update_time": "2025-08-15 18:04:05"
+                "status": "初始状态",
+                "create_time": "2006-01-02 15:04:05",
+                "update_time": "2006-01-02 15:04:05",
+                "icon_file": {
+                    "file_id": "b621996a-1def-4b05-bd05-0fc3b7d5ff0c",
+                    "file_link": "http://47.109.79.103:7001/public-bucket/icon_20251110112517_59504cb4.jpg"
                 },
-                "tags": [
+                "feature_images": [
                     {
-                        "id": 1,
-                        "name": "单机d",
-                        "create_time": "2025-08-15 18:04:09",
-                        "update_time": "2025-08-19 11:56:57"
+                        "file_id": "82fa5d51-9ff2-4c74-a2c1-e32bfddf6bce",
+                        "file_link": "http://47.109.79.103:7001/public-bucket/hero1_20251110112520_8cb1a896.jpeg"
                     },
                     {
-                        "id": 5,
-                        "name": "免费",
-                        "create_time": "2025-08-19 11:54:39",
-                        "update_time": "2025-08-19 11:54:39"
+                        "file_id": "a1e29179-dec9-48b8-aacd-6dfa8cec183b",
+                        "file_link": "http://47.109.79.103:7001/public-bucket/hero2_20251110112525_b161c1cf.jpeg"
                     }
                 ],
-                "developer": "测试开发商1",
-                "publisher": "测试发行商1",
-                "description": "测试描述",
-                "details": "测试详情",
-                "media_infos": [
-                    {
-                        "id": 12,
-                        "file_id": "93272ed5-c394-442c-94ba-fcf96e4d2e49",
-                        "media_type": 1,
-                        "media_url": "http://124.220.236.38:7001/icons/binghongcha_20250820134009_a1bf5539.jpg",
-                        "status": 2
-                    },
-                    {
-                        "id": 13,
-                        "file_id": "2e1e1c3f-c2ce-4b1a-9556-f62e0590cd62",
-                        "media_type": 3,
-                        "media_url": "http://124.220.236.38:7001/icons/276047_small_20250820134030_02bc4619.mp4",
-                        "status": 2
-                    },
-                    {
-                        "id": 14,
-                        "file_id": "fae32913-57b9-42c4-8121-29b556a00f57",
-                        "media_type": 4,
-                        "media_url": "http://124.220.236.38:7001/file-engine/4399cszc_20250820134152_c7c2a4f5.exe",
-                        "status": 2
-                    }
-                ],
-                "average_rating": 0,
-                "create_time": "2025-08-20 13:39:34",
-                "update_time": "2025-08-20 13:39:34"
+                "video_file": {
+                    "file_id": "231d3789-aaf9-49dc-b5f7-c434c58475ba",
+                    "file_link": "http://47.109.79.103:7001/public-bucket/honor_20251110112528_6f6efe3a.mp4"
+                },
+                "apk_file": {
+                    "file_id": "d26cb9d6-fc3f-4e35-a10d-1b57c949f423",
+                    "file_link": "http://47.109.79.103:7001/public-bucket/honor_20251110112533_76f2bad8.apk"
+                },
+                "h5_link": ""
             }
         ],
-        "total": 0,
+        "total": 1,
         "current_page": 1
     }
 }
 */
 export function listTGame(query:object) {
   return request({
-    url: GameEngine+'/api/v1/game-engine/games',
+    url: GameEngine+'/api/v1/games',
     method: 'get',
     params: query
   })
 }
+
 /*
-req body:
-{
-    "type": 1,
-    "file_name": "test.jpg",
-    "file_size": 1024,
-    "content_type": "image/jpeg"
-} 
-res body:
 {
     "code": 0,
     "message": "OK",
     "data": {
-        "id": "4abd5001-c6f8-4c25-9848-c33e360f7822",
-        "original_name": "binghongcha.jpg",
-        "visit_url": "http://124.220.236.38:7001/icons/binghongcha_20250819155817_48e53e2b.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=admin/20250819/us-east-1/s3/aws4_request&X-Amz-Date=20250819T075817Z&X-Amz-Expires=1800&X-Amz-SignedHeaders=host&X-Amz-Signature=ba00e4c726c0b3f442996f24965d81c08fe2d4ad0907949163b1e7c0a07aa3d7",
-        "upload_url": "http://124.220.236.38:7001/icons/binghongcha_20250819155817_48e53e2b.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=admin/20250819/us-east-1/s3/aws4_request&X-Amz-Date=20250819T075817Z&X-Amz-Expires=1800&X-Amz-SignedHeaders=host&X-Amz-Signature=ba00e4c726c0b3f442996f24965d81c08fe2d4ad0907949163b1e7c0a07aa3d7"
+        "list": [
+            {
+                "id": 16,
+                "name": "王者荣耀",
+                "distribute_type": "APK",
+                "category": {
+                    "id": 2,
+                    "name": "动作枪战",
+                    "create_time": "2025-08-27 17:37:57",
+                    "update_time": "2025-08-27 17:37:57"
+                },
+                "tags": [
+                    {
+                        "id": 3,
+                        "name": "氪金",
+                        "create_time": "2025-08-27 17:37:57",
+                        "update_time": "2025-08-27 17:37:57"
+                    }
+                ],
+                "developer": "天美",
+                "publisher": "天美",
+                "description": "测试游戏基本信设置、媒体文件上传",
+                "details": "MOBA游戏，激情对战",
+                "status": "审核中",
+                "publish_time": null,
+                "reserve_count": 0,
+                "average_rating": 0,
+                "rating_score": 0,
+                "rating_count": 0,
+                "favorite_count": 0,
+                "download_count": 0,
+                "create_time": "2025-10-13 16:26:29",
+                "update_time": "2025-10-15 10:37:27",
+                "media_infos": [
+                    {
+                        "id": 6,
+                        "file_id": "b7b54718-3490-496d-b74e-082586cccc50",
+                        "media_type": 1,
+                        "media_url": "http://47.109.79.103:7001/public-bucket/honor_20251013162906_62c08be2.jpg",
+                        "status": 2
+                    },
+                    {
+                        "id": 7,
+                        "file_id": "acc0fcf1-c485-442a-9ffd-7d7b96fe6542",
+                        "media_type": 2,
+                        "media_url": "http://47.109.79.103:7001/public-bucket/hero1_20251013163343_9cda1e4f.jpeg",
+                        "status": 2
+                    },
+                    {
+                        "id": 8,
+                        "file_id": "ce1063dc-0d21-42fc-8201-846919aa79fa",
+                        "media_type": 2,
+                        "media_url": "http://47.109.79.103:7001/public-bucket/hero2_20251013163931_8fa60f38.jpeg",
+                        "status": 2
+                    },
+                    {
+                        "id": 9,
+                        "file_id": "e4b341b1-a573-4b5c-9ba1-9d3dcd519d23",
+                        "media_type": 3,
+                        "media_url": "http://47.109.79.103:7001/public-bucket/honor_20251013165037_ddf8f670.mp4",
+                        "status": 2
+                    },
+                    {
+                        "id": 10,
+                        "file_id": "1e0153b4-dc8e-4aab-bcce-8072cd42feac",
+                        "media_type": 4,
+                        "media_url": "http://47.109.79.103:7001/private-bucket/10040714_com.tencent.tmgp.sgame_a3950068_11.1.1.15_QXbwFp_20251015102613_80dc7888.apk",
+                        "status": 1
+                    }
+                ],
+                "is_favorite": false,
+                "is_reserve": false
+            }
+        ],
+        "total": 1,
+        "current_page": 1
     }
 }
 */
-export function uploadTGameMediaInfo(id:number,data:object) {
-  return request({
-    url: GameEngine + '/api/v1/game-engine/games/' + id + '/media-info/upload',
-    method: 'post',
-    data: data
-  })
-}
-
 /*
-req body:
-{
-    "success": true,
-}
-*/ 
-// 上报文件上传结果
-export function reportTGameMediaUploadResult(fileID:string,data:object) {
+游戏状态列表
+初始状态
+审核中
+审核通过
+可预约
+已上架
+已下架
+*/
+export function submitForReview(id:string) {
   return request({
-    url: GameEngine + '/api/v1/game-engine/games/media-info/'+fileID+'/upload-result',
+    url: GameEngine + `/api/v1/games/${id}/submit-for-review`,
+    method: 'post',
+  })
+}
+
+// 获取待审核游戏列表
+export function getReviewList(query?: object) {
+  return request({
+    url: GameEngine + '/api/v1/games/in-review',
+    method: 'get',
+    params: query
+  })
+}
+
+// 审核通过
+export function approveGame(id: string, data: object) {
+  return request({
+    url: GameEngine + `/api/v1/games/${id}/approve`,
     method: 'post',
     data: data
   })
 }
 
-export function saveTGameMediaInfo(gameID:number,data:object) {
+// 审核拒绝
+export function rejectGame(id: string, data: object) {
   return request({
-    url: GameEngine + '/api/v1/game-engine/games/' + gameID + '/media-info/save',
+    url: GameEngine + `/api/v1/games/${id}/reject`,
     method: 'post',
     data: data
   })
 }
-

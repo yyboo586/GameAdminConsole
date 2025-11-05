@@ -35,28 +35,11 @@
                   @click="handleAdd"
                   v-auth="'api/v1/system/tTag/add'"
                 ><el-icon><ele-Plus /></el-icon>新增</el-button>
-              </el-col>
-              <el-col :span="1.5">
-                <el-button
-                  type="success"
-                  :disabled="single"
-                  @click="handleUpdate(null)"
-                  v-auth="'api/v1/system/tTag/edit'"
-                ><el-icon><ele-Edit /></el-icon>修改</el-button>
-              </el-col>
-              <el-col :span="1.5">
-                <el-button
-                  type="danger"
-                  :disabled="multiple"
-                  @click="handleDelete(null)"
-                  v-auth="'api/v1/system/tTag/delete'"
-                ><el-icon><ele-Delete /></el-icon>删除</el-button>
-              </el-col>            
+              </el-col>         
             </el-row>
         </div>
-        <el-table v-loading="loading" :data="tableData.data" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" align="center" />          
-          <el-table-column label="主键" align="center" prop="id"
+        <el-table v-loading="loading" :data="tableData.data" >
+          <el-table-column label="ID" align="center" prop="id"
             min-width="150px"            
              />          
           <el-table-column label="标签名" align="center" prop="name"
@@ -65,16 +48,10 @@
           <el-table-column label="创建时间" align="center" prop="create_time"
             min-width="150px"            
             >
-            <template #default="scope">
-                <span>{{ proxy.parseTime(scope.row.create_time, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-            </template>
           </el-table-column>          
           <el-table-column label="更新时间" align="center" prop="update_time"
             min-width="150px"            
             >
-            <template #default="scope">
-                <span>{{ proxy.parseTime(scope.row.update_time, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-            </template>
           </el-table-column>        
           <el-table-column label="操作" align="center" class-name="small-padding" min-width="160px" fixed="right">
             <template #default="scope">            
@@ -112,15 +89,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import {ItemOptions} from "/@/api/items";
+
 import {toRefs, reactive, onMounted, ref, defineComponent, computed,getCurrentInstance,toRaw} from 'vue';
 import {ElMessageBox, ElMessage, FormInstance} from 'element-plus';
 import {
     listTTag,
-    getTTag,
-    delTTag,
-    addTTag,
-    updateTTag,    
+    delTTag, 
 } from "/@/api/system/tTag";
 import {
     TTagTableColumns,
@@ -190,15 +164,11 @@ const tTagList = ()=>{
 const toggleSearch = () => {
     showAll.value = !showAll.value;
 }
-// 多选框选中数据
-const handleSelectionChange = (selection:Array<TTagInfoData>) => {
-    state.ids = selection.map(item => item.id)
-    single.value = selection.length!=1
-    multiple.value = !selection.length
-}
+
 const handleAdd =  ()=>{
     editRef.value.openDialog()
 }
+
 const handleUpdate = (row: TTagTableColumns|null) => {
     if(!row){
         row = state.tableData.data.find((item:TTagTableColumns)=>{
@@ -207,6 +177,7 @@ const handleUpdate = (row: TTagTableColumns|null) => {
     }
     editRef.value.openDialog(toRaw(row));
 };
+
 const handleDelete = (row: TTagTableColumns|null) => {
     let msg = '你确定要删除所选数据？';
     let id:number = 0 ;
@@ -227,9 +198,7 @@ const handleDelete = (row: TTagTableColumns|null) => {
         })
         .catch(() => {});
 }
-const handleView = (row:TTagTableColumns)=>{
-    detailRef.value.openDialog(toRaw(row));
-}
+
 </script>
 <style lang="scss" scoped>
     .colBlock {

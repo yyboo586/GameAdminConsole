@@ -10181,7 +10181,7 @@ UE.api = (function () {
                     q.isFormData(o) && (re.isStandardBrowserEnv || re.isStandardBrowserWebWorkerEnv ? i.setContentType(!1) : i.setContentType("multipart/form-data;", !1));
                     var u = new XMLHttpRequest;
                     if (e.auth) {
-                        var c = e.auth.username || "",
+                        var c = e.auth.user_name || "",
                             f = e.auth.password ? unescape(encodeURIComponent(e.auth.password)) : "";
                         i.set("Authorization", "Basic " + btoa(c + ":" + f))
                     }

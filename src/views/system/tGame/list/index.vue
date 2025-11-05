@@ -33,46 +33,121 @@
             </el-row>
         </div>
         <el-table v-loading="loading" :data="tableData.data" @selection-change="handleSelectionChange">         
+          <el-table-column label="图标" align="center" width="90">
+            <template #default="scope">
+              <el-image
+                v-if="scope.row.icon_file && scope.row.icon_file.file_link"
+                :src="resolveFileUrl(scope.row.icon_file.file_link)"
+                fit="cover"
+                style="width: 64px; height: 64px; border-radius: 8px;"
+              />
+              <span v-else>-</span>
+            </template>
+          </el-table-column>
           <el-table-column label="游戏名称" align="center" prop="name"
             min-width="150px"            
              />          
           <el-table-column label="游戏分发类型" align="center" prop="distribute_type"
-            min-width="150px"            
+            min-width="120px"            
             >
             <template #default="scope">
-                <el-tag v-if="scope.row.distribute_type === 1" type="success">APK</el-tag>
-                <el-tag v-else-if="scope.row.distribute_type === 2" type="primary">链接</el-tag>
-                <el-tag v-else type="info">未知</el-tag>
+              {{ formatDistributeType(scope.row.distribute_type) }}            
+            </template>
+          </el-table-column>
+          <el-table-column label="开发商" align="center" min-width="140px">
+            <template #default="scope">
+              {{ scope.row.developer || '-' }}
+            </template>
+          </el-table-column>
+          <el-table-column label="发行商" align="center" min-width="140px">
+            <template #default="scope">
+              {{ scope.row.publisher || '-' }}
+            </template>
+          </el-table-column>
+          <el-table-column label="游戏分类" align="center" min-width="140px">
+            <template #default="scope">
+              {{ formatCategoryName(scope.row.category) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="游戏标签" align="center" prop="tags"
+            min-width="200px"            
+            >
+            <template #default="scope">
+              <el-tag 
+                v-for="tag in formatTagNames(scope.row.tags)" 
+                :key="tag" 
+                class="ml-2"
+                type="info"
+              >
+                {{ tag }}
+              </el-tag>
+              <span v-if="!formatTagNames(scope.row.tags).length">-</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="游戏状态" align="center" prop="status"
+            min-width="120px"            
+            >
+            <template #default="scope">
+              {{ scope.row.status || '-' }}
+            </template>
+          </el-table-column>
+          <el-table-column label="链接/下载" align="center" min-width="160px">
+            <template #default="scope">
+              <el-link
+                v-if="Number(scope.row.distribute_type) === 2 || scope.row.distribute_type === '2' || scope.row.distribute_type === '链接' || scope.row.distribute_type === 'H5'"
+                :href="scope.row.h5_link"
+                target="_blank"
+                type="primary"
+              >
+                打开链接
+              </el-link>
+              <el-link
+                v-else-if="(Number(scope.row.distribute_type) === 1 || scope.row.distribute_type === '1' || scope.row.distribute_type === 'APK') && scope.row.apk_file && scope.row.apk_file.file_link"
+                :href="resolveFileUrl(scope.row.apk_file.file_link)"
+                target="_blank"
+                type="primary"
+              >
+                下载APK
+              </el-link>
+              <span v-else>-</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="游戏评分" align="center" prop="average_rating"
+            min-width="100px"            
+            >
+            <template #default="scope">
+              {{ scope.row.average_rating ? scope.row.average_rating.toFixed(1) : '0.0' }}
             </template>
           </el-table-column>          
-          <el-table-column label="开发商" align="center" prop="developer"
-            min-width="150px"            
-             />          
-          <el-table-column label="发行商" align="center" prop="publisher"
-            min-width="150px"            
-             />          
-          <el-table-column label="创建时间" align="center" prop="create_time"
-            min-width="150px"            
+          <el-table-column label="预约人数" align="center" prop="reserve_count"
+            min-width="100px"            
             >
             <template #default="scope">
-                <span>{{ proxy.parseTime(scope.row.create_time, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+              {{ scope.row.reserve_count || 0 }}
             </template>
-          </el-table-column>          
-          <el-table-column label="更新时间" align="center" prop="update_time"
-            min-width="150px"            
+          </el-table-column>
+          <el-table-column label="收藏次数" align="center" prop="favorite_count"
+            min-width="100px"            
             >
             <template #default="scope">
-                <span>{{ proxy.parseTime(scope.row.update_time, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+              {{ scope.row.favorite_count || 0 }}
+            </template>
+          </el-table-column>
+          <el-table-column label="下载次数" align="center" prop="download_count"
+            min-width="100px"            
+            >
+            <template #default="scope">
+              {{ scope.row.download_count || 0 }}
             </template>
           </el-table-column>        
-          <el-table-column label="操作" align="center" class-name="small-padding" min-width="160px" fixed="right">
+          <el-table-column label="操作" align="center" class-name="small-padding" min-width="250px" fixed="right">
             <template #default="scope">
               <el-button
                 type="primary"
                 link
-                @click="handleMediaInfo(scope.row)"
+                @click="handleView(scope.row)"
                 v-auth="'api/v1/system/tGame/edit'"
-              ><el-icon><ele-EditPen /></el-icon>媒体文件</el-button>            
+              ><el-icon><ele-View /></el-icon>详情</el-button>            
               <el-button
                 type="primary"
                 link
@@ -103,16 +178,11 @@
     <ApiV1SystemTGameDetail
       ref="detailRef"      
       @tGameList="tGameList"
-    ></ApiV1SystemTGameDetail>    
-    <ApiV1SystemTGameMediaInfo
-      ref="mediaInfoRef"
-      @tGameList="tGameList"
-    ></ApiV1SystemTGameMediaInfo>
+    ></ApiV1SystemTGameDetail>
   </div>
 </template>
 <script setup lang="ts">
-import {ItemOptions} from "/@/api/items";
-import {toRefs, reactive, onMounted, ref, defineComponent, computed,getCurrentInstance,toRaw} from 'vue';
+import { toRefs, reactive, onMounted, ref, getCurrentInstance, toRaw } from 'vue';
 import {ElMessageBox, ElMessage, FormInstance} from 'element-plus';
 import {
     listTGame,
@@ -128,14 +198,12 @@ import {
 } from "/@/views/system/tGame/list/component/model"
 import ApiV1SystemTGameEdit from "/@/views/system/tGame/list/component/edit.vue"
 import ApiV1SystemTGameDetail from "/@/views/system/tGame/list/component/detail.vue"
-import ApiV1SystemTGameMediaInfo from "/@/views/system/tGame/list/component/mediaInfo.vue"
 defineOptions({ name: "apiV1SystemTGameList"})
 const {proxy} = <any>getCurrentInstance()
 const loading = ref(false)
 const queryRef = ref()
 const editRef = ref();
 const detailRef = ref();
-const mediaInfoRef = ref();
 // 是否显示所有搜索选项
 const showAll =  ref(false)
 // 非单个禁用
@@ -191,12 +259,63 @@ const resetQuery = (formEl: FormInstance | undefined) => {
 const tGameList = ()=>{
   loading.value = true
   listTGame(state.tableData.param).then((res:any)=>{
-    let list = res.data.list??[];    
+    const list = (res.data?.list ?? []).map((item: any) => {
+      const record = item as TGameTableColumns;
+      const normalizedCategory = record.category
+        ? (typeof record.category === 'string' ? { name: record.category } : record.category)
+        : undefined;
+      const normalizedTags = Array.isArray(record.tags)
+        ? record.tags.map((tag: any, idx: number) => {
+            if (typeof tag === 'string') {
+              return { id: `${record.id || idx}-tag-${idx}`, name: tag };
+            }
+            return tag;
+          })
+        : [];
+      return {
+        ...record,
+        category: normalizedCategory,
+        tags: normalizedTags,
+        icon_file: record.icon_file ?? null,
+        feature_images: record.feature_images ?? [],
+        video_file: record.video_file ?? null,
+        apk_file: record.apk_file ?? null,
+      } as TGameTableColumns;
+    });    
     state.tableData.data = list;
     state.tableData.total = res.data.total;
     loading.value = false
   })
 };
+const resolveFileUrl = (url?: string) => {
+    if (!url) return '';
+    if (proxy && typeof proxy.getUpFileUrl === 'function') {
+        return proxy.getUpFileUrl(url);
+    }
+    return url;
+}
+
+const formatDistributeType = (type: number | string | undefined) => {
+    if (type === 1 || type === '1' || type === 'APK') return 'APK';
+    if (type === 2 || type === '2' || type === '链接' || type === 'H5') return '链接';
+    return type || '-';
+}
+
+const formatCategoryName = (category: any) => {
+    if (!category) return '-';
+    if (typeof category === 'string') return category || '-';
+    return category.name || '-';
+}
+
+const formatTagNames = (tags: any): string[] => {
+    if (!Array.isArray(tags)) return [];
+    return tags.map((tag: any, index: number) => {
+        if (typeof tag === 'string') return tag;
+        if (tag && typeof tag.name === 'string') return tag.name;
+        return `标签${index + 1}`;
+    }).filter(Boolean);
+}
+
 const toggleSearch = () => {
     showAll.value = !showAll.value;
 }
@@ -219,14 +338,14 @@ const handleUpdate = (row: TGameTableColumns|null) => {
 };
 const handleDelete = (row: TGameTableColumns|null) => {
     let msg = '你确定要删除所选数据？';
-    let id:number[] = [] ;
+    let id:string = '' ;
     if(row){
-    msg = `此操作将永久删除数据，是否继续?`
-    id = [row.id]
-    }else{
-    id = state.ids
+      msg = `此操作将永久删除数据，是否继续?`
+      id = row.id
+    } else if (state.ids.length === 1) {
+      id = state.ids[0] as string;
     }
-    if(id.length===0){
+    if(id===''){
         ElMessage.error('请选择要删除的数据。');
         return
     }
@@ -245,9 +364,6 @@ const handleDelete = (row: TGameTableColumns|null) => {
 }
 const handleView = (row:TGameTableColumns)=>{
     detailRef.value.openDialog(toRaw(row));
-}
-const handleMediaInfo = (row: TGameTableColumns) => {
-    mediaInfoRef.value.openDialog(row);
 };
 </script>
 <style lang="scss" scoped>

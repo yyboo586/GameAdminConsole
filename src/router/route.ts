@@ -60,7 +60,40 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					roles: ['admin'],
 					icon: 'iconfont icon-diannao',
 				},
-			}
+			},
+			{
+				path: '/system/agreement',
+				name: 'systemAgreement',
+				component: () => import('/@/layout/routerView/parent.vue'),
+				redirect: '/system/agreement/list',
+				meta: {
+					title: '协议管理',
+					isLink: '',
+					isHide: false,
+					isKeepAlive: true,
+					isAffix: false,
+					isIframe: false,
+					roles: ['admin'],
+					icon: 'ele-Document',
+				},
+				children: [
+					{
+						path: '/system/agreement/list',
+						name: 'systemAgreementList',
+						component: () => import('/@/views/system/agreement/index.vue'),
+						meta: {
+							title: '用户协议管理',
+							isLink: '',
+							isHide: false,
+							isKeepAlive: true,
+							isAffix: false,
+							isIframe: false,
+							roles: ['admin'],
+							icon: 'ele-Reading',
+						},
+					},
+				],
+			},
 		],
 	},
 ];
